@@ -9,7 +9,7 @@ def stats(r: pd.Series) -> dict:
     r = r.dropna()
     curve = (1 + r).cumprod()
     out = {"Total return": curve.iloc[-1] - 1,
-           "Max drawdown": min((curve / curve.cummax() - 1).min(), 0),
+           "Max drawdown": min((curve / curve.cummax().clip(lower=1) - 1).min(), 0),
            "Best month": r.max(), "Worst month": r.min()}
     if len(r) >= 12:  # annualized numbers are meaningless on a few months
         vol = r.std() * np.sqrt(12)

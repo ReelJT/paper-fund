@@ -53,7 +53,7 @@ def main():
     # 2. Live paper fund since inception
     inception = pd.Timestamp(cfg.INCEPTION)
     print(f"\n=== Live since inception {inception:%Y-%m-%d} ===")
-    if daily.index[-1] < inception + pd.offsets.MonthEnd(1):
+    if daily.index[-1] < inception + pd.offsets.BMonthEnd(1):
         print("No completed month yet. Rerun after the first month end.")
         w = cfg.WEIGHTS
     else:

@@ -18,6 +18,9 @@ def simulate(daily: pd.DataFrame, cfg, start, start_value=100_000, guard=None):
     start = pd.Timestamp(start)
     month_ends = daily.resample("ME").last()
     month_ends = month_ends[month_ends.index > start]
+    last = daily.index[-1]
+    if last < last + pd.offsets.BMonthEnd(0):   # current month not finished yet
+        month_ends = month_ends[month_ends.index < last.to_period("M").start_time]
     # The fund starts at the close on (or just before) its start date, then marks at each month end
     first_close = daily.loc[:start].iloc[[-1]]
     monthly = pd.concat([first_close, month_ends])
